@@ -44,14 +44,15 @@ pub struct EnaRecord {
 pub struct DownloadInfo {
     pub orig_acc: String,
     pub run_acc: String,
-    pub url: String,
+    pub http_url: String,
     pub md5: String,
+    pub ascp_url: String,
 }
 
 impl DownloadInfo {
     pub fn to_aria2(&self) -> String {
         let mut aria2 = String::new();
-        aria2.push_str(format!("https://{}", self.url).as_str());
+        aria2.push_str(format!("https://{}", self.http_url).as_str());
         aria2.push_str("\n ");
         aria2.push_str(format!("checksum=md5={}", self.md5).as_str());
         aria2.push_str("\n ");
@@ -101,15 +102,18 @@ pub trait DownloadableAccession {
             for record in resp {
                 let md5_vec: Vec<String> =
                     record.fastq_md5.split(";").map(|x| x.to_string()).collect();
-                let url_vec: Vec<String> =
+                let http_url_vec: Vec<String> =
                     record.fastq_ftp.split(";").map(|x| x.to_string()).collect();
+                let ascp_url_vec: Vec<String> =
+                    record.fastq_aspera.split(";").map(|x| x.to_string()).collect();
                 let run_acc_: String = record.run_accession.to_string();
-                for (md5, url) in izip!(md5_vec, url_vec) {
+                for (md5, http_url, ascp_url) in izip!(md5_vec, http_url_vec, ascp_url_vec) {
                     let download_info = DownloadInfo {
                         orig_acc: self.orig_accession().to_string(),
                         run_acc: run_acc_.clone(),
-                        url: url,
+                        http_url: "https://".to_string() + &http_url,
                         md5: md5,
+                        ascp_url: "era-fasp@".to_string() + &ascp_url,
                     };
                     download_info_list.push(download_info);
                 }
@@ -224,7 +228,7 @@ mod tests {
         assert_eq!(download_info_list[0].orig_acc, "SRR000001");
         assert_eq!(download_info_list[0].run_acc, "SRR000001");
         assert_eq!(
-            download_info_list[0].url,
+            download_info_list[0].http_url,
             "ftp.sra.ebi.ac.uk/vol1/fastq/SRR000/SRR000001/SRR000001.fastq.gz"
         );
         assert_eq!(
@@ -241,7 +245,7 @@ mod tests {
         assert_eq!(download_info_list[0].orig_acc, "SRX2243567");
         assert_eq!(download_info_list[0].run_acc, "SRR4421243");
         assert_eq!(
-            download_info_list[0].url,
+            download_info_list[0].http_url,
             "ftp.sra.ebi.ac.uk/vol1/fastq/SRR442/003/SRR4421243/SRR4421243.fastq.gz"
         );
         assert_eq!(
@@ -258,7 +262,7 @@ mod tests {
         assert_eq!(download_info_list[0].orig_acc, "GSM2344754");
         assert_eq!(download_info_list[0].run_acc, "SRR4421243");
         assert_eq!(
-            download_info_list[0].url,
+            download_info_list[0].http_url,
             "ftp.sra.ebi.ac.uk/vol1/fastq/SRR442/003/SRR4421243/SRR4421243.fastq.gz"
         );
         assert_eq!(
