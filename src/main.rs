@@ -32,10 +32,14 @@ async fn main() {
         .filter_map(|x| x)
         .flatten()
         .collect::<Vec<_>>();
-    for r in result {
-        if args.ascp {
-            println!("{}", r.to_ascp());
-        } else {
+    if args.ascp {
+        for r in result {
+            println!("[");
+            println!("  {}", r.to_ascp());
+            println!("]");
+        }
+    } else {
+        for r in result {
             println!("{}", r.to_aria2());
         }
     }
