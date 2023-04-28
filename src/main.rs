@@ -29,24 +29,6 @@ struct Cli {
     interval: u64,
 }
 
-async fn fetch_info_and_print(code: &AccessionCodes, ascp: bool) {
-    let download_info = code.get_download_info().await;
-    if let Some(download_info) = download_info {
-        for i in download_info {
-            if ascp {
-                println!("{}", i.to_ascp());
-            } else {
-                println!("{}", i.to_aria2());
-            }
-        }
-    }
-    eprintln!(
-        "generated download information for accession {}, name {}",
-        code.orig_accession(),
-        code.name().unwrap_or("NA".to_string()),
-    );
-}
-
 #[tokio::main]
 async fn main() {
     let args = Cli::parse();
@@ -55,9 +37,6 @@ async fn main() {
     let mut line_iter = stdin.lines();
 
     let mut tasks = Vec::new();
-    if args.ascp {
-        println!("[");
-    }
     while let Some(Ok(line)) = line_iter.next() {
         let line = line.trim();
         if line.is_empty() {
@@ -65,14 +44,31 @@ async fn main() {
         }
         let code = AccessionCodes::from_str(line).unwrap();
         tasks.push(task::spawn(async move {
-            fetch_info_and_print(&code, args.ascp).await;
+            let info = code.get_download_info().await;
+            eprintln!(
+                "Generated download info for {}, name {}",
+                code.orig_accession(),
+                code.name().unwrap_or("NA".to_string())
+            );
+            info
         }));
         // sleep 200ms to avoid too many requests
         time::sleep(time::Duration::from_millis(args.interval)).await;
     }
-    join_all(tasks).await;
+    let all_info = join_all(tasks).await;
+    // unwrap all info
+    let all_info = all_info
+        .into_iter()
+        .map(|x| x.unwrap())
+        .filter_map(|x| x)
+        .flat_map(|x| x.into_iter())
+        .collect::<Vec<_>>();
     if args.ascp {
-        println!("]");
+        println!("{}", serde_json::to_string_pretty(&all_info).unwrap());
+    } else {
+        for info in all_info {
+            println!("{}", info.to_aria2());
+        }
     }
 }
 
