@@ -5,9 +5,19 @@ use std::io::BufReader;
 use types::{AccessionCodes, DownloadableAccession};
 
 #[derive(Parser)]
-#[command(author, version, about, long_about=None)]
+#[command(author, version, about = "Get ENA fastq link from NCBI accession\n\
+Read from STDIN, and print to STDOUT\n\
+Input should be whitespace (space, tab, ..) delimited NCBI accession codes (srx, srr, gsm) and related (optional) names\n\
+One item per line\n\
+Names should not contain whitespace\n\
+Output is aria2 input file format, or aspera download info json\n\
+", long_about=None)]
 struct Cli {
-    #[arg(short, long)]
+    #[arg(
+        short,
+        long,
+        help = "print aspera download info json, default is of aria2 input file format"
+    )]
     ascp: bool,
 }
 
