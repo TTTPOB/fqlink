@@ -259,7 +259,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fqdown"
+name = "fqlink"
 version = "0.1.0"
 dependencies = [
  "anyhow",
