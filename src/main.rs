@@ -20,6 +20,13 @@ struct Cli {
         help = "print aspera download info json, default is of aria2 input file format"
     )]
     ascp: bool,
+    #[arg(
+        short,
+        long,
+        help = "time interval of submitting api request to ebi, unit: ms",
+        default_value_t = 200
+    )]
+    interval: u64,
 }
 
 async fn fetch_info_and_print(code: &AccessionCodes, ascp: bool) {
@@ -33,6 +40,11 @@ async fn fetch_info_and_print(code: &AccessionCodes, ascp: bool) {
             }
         }
     }
+    println!(
+        "generated download information for accession {}, name {}",
+        code.orig_accession(),
+        code.name().unwrap_or("NA".to_string()),
+    );
 }
 
 #[tokio::main]
@@ -56,7 +68,7 @@ async fn main() {
             fetch_info_and_print(&code, args.ascp).await;
         }));
         // sleep 200ms to avoid too many requests
-        time::sleep(time::Duration::from_millis(200)).await;
+        time::sleep(time::Duration::from_millis(args.interval)).await;
     }
     join_all(tasks).await;
     if args.ascp {
