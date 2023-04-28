@@ -81,7 +81,7 @@ impl DownloadInfo {
         md5: String,
         ascp_url: String,
     ) -> Self {
-        let mut info = Self{
+        let mut info = Self {
             name,
             orig_acc,
             run_acc,
@@ -94,15 +94,16 @@ impl DownloadInfo {
         info
     }
     fn download_path(&self) -> String {
-        let file_stem = match &self.name {
-            Some(name) => {
-                name.clone() + "/" + self.http_url.split('/').last().unwrap()
-            },
+        match &self.name {
+            Some(name) => name.clone() + "/" + self.http_url.split('/').last().unwrap(),
             None => {
-                self.orig_acc.clone() + "/" + self.run_acc.as_str() + "/" + self.http_url.split('/').last().unwrap()
+                self.orig_acc.clone()
+                    + "/"
+                    + self.run_acc.as_str()
+                    + "/"
+                    + self.http_url.split('/').last().unwrap()
             }
-        };
-        file_stem + ".fastq.gz"
+        }
     }
     pub fn to_aria2(&self) -> String {
         let mut aria2 = String::new();
@@ -112,13 +113,7 @@ impl DownloadInfo {
         aria2.push_str("\n ");
         aria2.push_str("check-integrity=true");
         aria2.push_str("\n ");
-        aria2.push_str(
-            format!(
-                "out={}",
-                self.download_path()
-            )
-            .as_str(),
-        );
+        aria2.push_str(format!("out={}", self.download_path()).as_str());
         aria2.push_str("\n");
         aria2
     }
