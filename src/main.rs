@@ -40,7 +40,7 @@ async fn fetch_info_and_print(code: &AccessionCodes, ascp: bool) {
             }
         }
     }
-    println!(
+    eprintln!(
         "generated download information for accession {}, name {}",
         code.orig_accession(),
         code.name().unwrap_or("NA".to_string()),
