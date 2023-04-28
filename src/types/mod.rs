@@ -106,7 +106,7 @@ impl DownloadInfo {
     }
     pub fn to_aria2(&self) -> String {
         let mut aria2 = String::new();
-        aria2.push_str(format!("https://{}", self.http_url).as_str());
+        aria2.push_str(self.http_url.as_str());
         aria2.push_str("\n ");
         aria2.push_str(format!("checksum=md5={}", self.md5).as_str());
         aria2.push_str("\n ");
