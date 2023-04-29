@@ -266,6 +266,7 @@ dependencies = [
  "async-trait",
  "clap",
  "futures-util",
+ "is-terminal",
  "itertools",
  "regex",
  "reqwest",
