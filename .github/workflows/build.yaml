@@ -12,19 +12,19 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          # musl linux
-          target: x86_64-unknown-linux-musl
           override: true
           profile: minimal
       
       - name: build project
         uses: actions-rs/cargo@v1
+        env:
+          RUSTFLAGS: "-C target-feature=+crt-static"
         with:
           command: build
-          args: --release --target x86_64-unknown-linux-musl
+          args: --release --target=x86_64-unknown-linux-gnu
       
       - name: save artifact
         uses: actions/upload-artifact@v2
         with:
           name: fqlink-static-link
-          path: target/x86_64-unknown-linux-musl/release/fqlink
+          path: target/x86_64-unknown-linux-gnu/release/fqlink
