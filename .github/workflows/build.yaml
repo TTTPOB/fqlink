@@ -1,0 +1,30 @@
+name: build and save artifact
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      
+      - name: setup rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          # musl linux
+          target: x86_64-unknown-linux-musl
+          override: true
+          profile: minimal
+      
+      - name: build project
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target x86_64-unknown-linux-musl
+      
+      - name: save artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: fqlink-static-link
+          path: target/x86_64-unknown-linux-musl/release/fqlink
