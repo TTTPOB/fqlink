@@ -17,7 +17,9 @@ fqlink is a small command-line utility to help you retrieve ENA fastq links from
 
 ## Installation
 
-For now use cargo to install from GitHub:
+Download the binary from release, put it wherever in your `PATH`.
+
+You can also use cargo to install from GitHub:
 
 ```bash
 cargo install --git https://github.com/TTTPOB/fqlink.git
