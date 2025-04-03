@@ -47,16 +47,5 @@ SRR123456 SampleNameA
 SRR654321 SampleNameB
 ```
 
-## Options
-
-| Option      | Description                                                                                  |
-|-------------|----------------------------------------------------------------------------------------------|
-| `-a`, `--ascp` | Print Aspera download info JSON; the default output format is aria2 input file format |
-
-
-## Notes
-
-The Aspera download info JSON output is intended for use with another under-developing tool. It is not available yet.
-
 ## License
 MIT

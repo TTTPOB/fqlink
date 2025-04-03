@@ -55,12 +55,6 @@ struct Cli {
     #[arg(
         short,
         long,
-        help = "print aspera download info json, default is of aria2 input file format"
-    )]
-    ascp: bool,
-    #[arg(
-        short,
-        long,
         help = "time interval of submitting api request to ebi, unit: ms",
         default_value_t = 200
     )]
@@ -103,12 +97,8 @@ async fn main() {
         .filter_map(|x| x)
         .flat_map(|x| x.into_iter())
         .collect::<Vec<_>>();
-    if args.ascp {
-        out.write_line(&serde_json::to_string_pretty(&all_info).unwrap()).expect("write error");
-    } else {
-        for info in all_info {
-            out.write_line(&info.to_aria2()).expect("write error");
-        }
+    for info in all_info {
+        out.write_line(&info.to_aria2()).expect("write error");
     }
 
     out.flush().expect("flush error");
