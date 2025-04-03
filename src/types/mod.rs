@@ -117,10 +117,6 @@ impl DownloadInfo {
         aria2.push_str("\n");
         aria2
     }
-    pub fn to_ascp(&self) -> String {
-        // just output json with serde_json
-        serde_json::to_string(self).unwrap()
-    }
 }
 
 #[async_trait]
