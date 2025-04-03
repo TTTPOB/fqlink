@@ -6,9 +6,6 @@
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Options](#options)
-- [Troubleshooting](#troubleshooting)
-- [Notes](#notes)
 - [License](#license)
 
 ## Installation
@@ -24,12 +21,14 @@ cargo install --git https://github.com/TTTPOB/fqlink.git
 
 ## Usage
 
-Read from STDIN, and print to STDOUT
+You can always use `fqlink -h`.
+
+Read from STDIN, and print to STDOUT.
 ```bash
 fqlink [OPTIONS] <input_file >output_file
 ```
 
-The output file can then be used in aria2c
+The output file can then be used in aria2c, like: 
 ```bash
 aria2c -x16 -s16 -k1m -i output_file
 ```
