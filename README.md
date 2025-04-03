@@ -1,10 +1,6 @@
-Here's the concise `README.md` for your project:
-
----
-
 # fqlink
 
-fqlink is a small command-line utility to help you retrieve ENA fastq links from NCBI accession codes. The input is provided through STDIN with each line representing an NCBI accession code (srx, srr, gsm) and an optional related name, separated by whitespace (space, tab, etc.). The output is either in the aria2 input file format or Aspera download info JSON format.
+`fqlink` is a small command-line utility to help you retrieve ENA fastq links from NCBI accession codes. The input is provided through STDIN with each line representing an NCBI accession code (srx, srr, gsm) and an optional related name, separated by whitespace (space, tab, etc.). The output is either in the aria2 input file format or Aspera download info JSON format.
 
 ## Table of Contents
 
